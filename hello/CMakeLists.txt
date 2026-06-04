@@ -1,0 +1,13 @@
+include(${CLEAR_VARS})
+set(LOCAL_MODULE hello_headers)
+set(LOCAL_EXPORT_C_INCLUDES
+    ${CMAKE_CURRENT_LIST_DIR}/include)
+include(${BUILD_INTERFACE_LIBRARY})
+
+include(${CLEAR_VARS})
+set(LOCAL_MODULE hello)
+set(LOCAL_SRC_DIRS
+    ${CMAKE_CURRENT_LIST_DIR}/src)
+set(LOCAL_INTERFACE_LIBRARIES
+    hello_headers)
+include(${BUILD_OBJECT_LIBRARY})

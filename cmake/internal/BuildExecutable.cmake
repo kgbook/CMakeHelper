@@ -1,0 +1,45 @@
+if(NOT LOCAL_MODULE)
+    message(FATAL_ERROR "LOCAL_MODULE must be set before including BUILD_EXECUTABLE")
+endif()
+
+include(${LOCAL_BUILD_SYSTEM_PATH}/internal/CollectLocalSources.cmake)
+
+add_executable(${LOCAL_MODULE} ${LOCAL_SRC_FILES})
+
+foreach(LOCAL_OBJECT_LIBRARY IN LISTS LOCAL_OBJECT_LIBRARIES)
+    target_link_libraries(${LOCAL_MODULE}
+        PRIVATE
+            ${LOCAL_OBJECT_LIBRARY})
+endforeach()
+
+if(LOCAL_EXPORT_C_INCLUDES OR LOCAL_C_INCLUDES)
+    target_include_directories(${LOCAL_MODULE}
+        PUBLIC
+            ${LOCAL_EXPORT_C_INCLUDES}
+        PRIVATE
+            ${LOCAL_C_INCLUDES})
+endif()
+
+set(LOCAL_DEPENDENCIES
+    ${LOCAL_STATIC_LIBRARIES}
+    ${LOCAL_SHARED_LIBRARIES}
+    ${LOCAL_INTERFACE_LIBRARIES}
+    ${LOCAL_HEADER_LIBRARIES})
+
+if(LOCAL_DEPENDENCIES)
+    target_link_libraries(${LOCAL_MODULE}
+        PRIVATE
+            ${LOCAL_DEPENDENCIES})
+endif()
+
+if(LOCAL_MODULE_FILENAME)
+    set_target_properties(${LOCAL_MODULE} PROPERTIES
+        OUTPUT_NAME ${LOCAL_MODULE_FILENAME})
+endif()
+
+if(LOCAL_RUNTIME_OUTPUT_DIRECTORY)
+    set_target_properties(${LOCAL_MODULE} PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${LOCAL_RUNTIME_OUTPUT_DIRECTORY})
+endif()
+
+unset(LOCAL_DEPENDENCIES)
