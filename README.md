@@ -1,5 +1,7 @@
 # CMakeHelper
 
+This is the English README. For the Chinese version, please refer to the technical blog article: [用 Android.mk 的写法组织 CMake](https://kgbook.github.io/blog/articles/Android/android-mk-style-cmake-helper)
+
 CMakeHelper is a small CMake module that keeps target declarations consistent across
 C++ projects. It uses an Android.mk-style declaration flow: clear local variables,
 set `LOCAL_*` values, then include one of the `BUILD_*` files to create the target.
