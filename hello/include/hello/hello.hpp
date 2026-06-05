@@ -1,10 +1,9 @@
 #pragma once
 
 #include <string>
-#include <string_view>
 
 namespace hello {
 
-std::string message(std::string_view name);
+std::string message(const std::string& name);
 
 }  // namespace hello

@@ -2,9 +2,9 @@
 
 namespace hello {
 
-std::string message(std::string_view name)
+std::string message(const std::string& name)
 {
-    return "Hello, " + std::string(name) + "!";
+    return "Hello, " + name + "!";
 }
 
 }  // namespace hello

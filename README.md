@@ -41,10 +41,10 @@ The module does not force a C++ standard; set that at project level or on specif
 targets when your project needs one. The module is cross-platform CMake and is not
 tied to Android or any single platform.
 
-For example, this repository enables C++17 from the top-level `CMakeLists.txt`:
+For example, this repository enables C++11 from the top-level `CMakeLists.txt`:
 
 ```cmake
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 ```
@@ -59,6 +59,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 - `BUILD_PREBUILT`: creates an imported prebuilt library.
 - `BUILD_INTERFACE_LIBRARY`: creates an interface/header-only library.
 - `BUILD_HEADER_LIBRARY`: creates an interface/header-only library.
+- `ALL_SUBDIR_CMAKELISTS`: adds each direct child directory that contains `CMakeLists.txt`.
+- `ALL_CMAKELISTS_UNDER`: recursively adds directories containing `CMakeLists.txt`.
 
 Common arguments:
 
@@ -85,6 +87,49 @@ files still need to be listed manually.
 the current level of each directory, not nested subdirectories. Re-run CMake
 configuration after adding new source files to those directories.
 
+Use `ALL_SUBDIR_CMAKELISTS` or `ALL_CMAKELISTS_UNDER` when you want to build
+submodules instead of collecting nested sources into one target. Both entries are
+included from the parent `CMakeLists.txt`, but they use `add_subdirectory`
+internally so each submodule keeps normal CMake directory scope.
+
+```cmake
+include(path/to/cmake/CMakeHelper.cmake)
+
+# Add direct children that contain CMakeLists.txt.
+include(${ALL_SUBDIR_CMAKELISTS})
+
+# Or add every nested CMakeLists.txt under LOCAL_PATH.
+set(LOCAL_PATH ${CMAKE_CURRENT_LIST_DIR}/modules)
+include(${ALL_CMAKELISTS_UNDER})
+```
+
+`ALL_SUBDIR_CMAKELISTS` is useful for a flat module directory such as
+`example/auto_lists/`, where each direct child owns one target group:
+
+```cmake
+# example/auto_lists/CMakeLists.txt
+include(${ALL_SUBDIR_CMAKELISTS})
+```
+
+`ALL_CMAKELISTS_UNDER` is useful when a feature tree has targets more than one
+level deep and you still want each target to keep its own `CMakeLists.txt`:
+
+```cmake
+# example/auto_lists/recursive/CMakeLists.txt
+set(LOCAL_PATH ${CMAKE_CURRENT_LIST_DIR}/modules)
+include(${ALL_CMAKELISTS_UNDER})
+unset(LOCAL_PATH)
+```
+
+The bundled examples separate the main interface styles:
+
+- `example/basic_hello`: uses explicit Android.mk-style target declarations
+  (`CLEAR_VARS`, `LOCAL_*`, and `BUILD_EXECUTABLE`).
+- `example/auto_lists`: combines both automatic CMakeLists discovery patterns.
+  Its top-level `CMakeLists.txt` discovers direct children, and the `recursive`
+  child discovers nested modules under `recursive/modules`, including
+`modules/core/CMakeLists.txt` and `modules/features/phrase/CMakeLists.txt`.
+
 Prefer `LOCAL_INTERFACE_LIBRARIES` for header-only/interface targets. `LOCAL_HEADER_LIBRARIES`
 is kept as a compatibility alias for projects that already use that naming.
 
@@ -95,11 +140,13 @@ Build and run the bundled hello world example:
 ```sh
 cmake -S . -B build
 cmake --build build
-./build/example/hello_world
+./build/example/basic_hello/basic_hello_world
+./build/example/auto_lists/recursive/auto_lists_demo
 ```
 
 Expected output:
 
 ```text
 Hello, world!
+direct child + recursive child via ALL_CMAKELISTS_UNDER
 ```
