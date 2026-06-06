@@ -3,6 +3,7 @@ if(NOT LOCAL_MODULE)
 endif()
 
 include(${LOCAL_BUILD_SYSTEM_PATH}/internal/CollectLocalSources.cmake)
+include(${LOCAL_BUILD_SYSTEM_PATH}/internal/PublishLocalObjectSources.cmake)
 
 add_executable(${LOCAL_MODULE} ${LOCAL_SRC_FILES})
 
@@ -31,6 +32,7 @@ if(LOCAL_DEPENDENCIES)
     target_link_libraries(${LOCAL_MODULE}
         PRIVATE
             ${LOCAL_DEPENDENCIES})
+    publish_local_object_sources(${LOCAL_MODULE} PRIVATE ${LOCAL_DEPENDENCIES})
 endif()
 
 if(LOCAL_MODULE_FILENAME)

@@ -2,6 +2,8 @@ if(NOT LOCAL_MODULE)
     message(FATAL_ERROR "LOCAL_MODULE must be set before including BUILD_INTERFACE_LIBRARY")
 endif()
 
+include(${LOCAL_BUILD_SYSTEM_PATH}/internal/PublishLocalObjectSources.cmake)
+
 add_library(${LOCAL_MODULE} INTERFACE)
 
 if(LOCAL_EXPORT_C_INCLUDES)
@@ -21,15 +23,7 @@ if(LOCAL_DEPENDENCIES)
     target_link_libraries(${LOCAL_MODULE}
         INTERFACE
             ${LOCAL_DEPENDENCIES})
+    publish_local_object_sources(${LOCAL_MODULE} INTERFACE ${LOCAL_DEPENDENCIES})
 endif()
-
-foreach(LOCAL_OBJECT_LIBRARY IN LISTS LOCAL_OBJECT_LIBRARIES)
-    target_link_libraries(${LOCAL_MODULE}
-        INTERFACE
-            ${LOCAL_OBJECT_LIBRARY})
-    target_sources(${LOCAL_MODULE}
-        INTERFACE
-            $<TARGET_OBJECTS:${LOCAL_OBJECT_LIBRARY}>)
-endforeach()
 
 unset(LOCAL_DEPENDENCIES)
