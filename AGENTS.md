@@ -1,20 +1,10 @@
 # AGENTS.md
 
-## Build
-
-```sh
-cmake -S . -B build
-cmake --build build
-```
-
-Example executables: `./build/hello/hello`, `./build/example/hello_world`
-
 ## Structure
 
 - `cmake/` — the deliverable CMake module. Include `cmake/CMakeHelper.cmake` from any project.
 - `hello/` — object library example (header-only + object files).
 - `example/` — executable linking against `hello`.
-- `build/`, `cmake-build-debug/` — generated build artifacts; safe to delete.
 
 ## CMake Module Usage
 
@@ -29,9 +19,14 @@ set(LOCAL_SRC_FILES src/foo.cpp)
 include(${BUILD_EXECUTABLE})  # or BUILD_STATIC_LIBRARY, BUILD_SHARED_LIBRARY, etc.
 ```
 
-Available targets: `BUILD_OBJECT_LIBRARY`, `BUILD_STATIC_LIBRARY`, `BUILD_SHARED_LIBRARY`, `BUILD_EXECUTABLE`, `BUILD_PREBUILT`, `BUILD_INTERFACE_LIBRARY`, `BUILD_HEADER_LIBRARY`.
+Available targets: `BUILD_OBJECT_LIBRARY`, `BUILD_STATIC_LIBRARY`, `BUILD_SHARED_LIBRARY`, `BUILD_EXECUTABLE`, `BUILD_PREBUILT`, `BUILD_INTERFACE_LIBRARY`, `BUILD_HEADER_LIBRARY`,
+`ALL_SUBDIR_CMAKELISTS`, `ALL_CMAKELISTS_UNDER`.
 
-`BUILD_INTERFACE_LIBRARY` and `BUILD_HEADER_LIBRARY` create header-only/interface libraries. `BUILD_HEADER_LIBRARY` is a compatibility alias for `BUILD_INTERFACE_LIBRARY`.
+Subdirectory helpers:
+
+- `CLEAR_VARS` — include before each module declaration; it clears all `LOCAL_*` variables so targets do not leak settings into each other.
+- `ALL_SUBDIR_CMAKELISTS` — include child directories that directly contain `CMakeLists.txt`, one level under the current `CMakeLists.txt` directory.
+- `ALL_CMAKELISTS_UNDER` — include every nested `CMakeLists.txt` below the current directory, or below `LOCAL_PATH` when it is set.
 
 ## Code Style
 
