@@ -57,6 +57,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 - `BUILD_SHARED_LIBRARY`: creates a shared library.
 - `BUILD_EXECUTABLE`: creates an executable.
 - `BUILD_PREBUILT`: creates an imported prebuilt library.
+- `BUILD_EXTERNAL_PROJECT`: builds a CMake external project and optionally creates imported targets for its byproducts.
 - `BUILD_INTERFACE_LIBRARY`: creates an interface/header-only library.
 - `BUILD_HEADER_LIBRARY`: creates an interface/header-only library.
 - `ALL_SUBDIR_CMAKELISTS`: adds each direct child directory that contains `CMakeLists.txt`.
@@ -78,6 +79,16 @@ Common arguments:
 - `LOCAL_RUNTIME_OUTPUT_DIRECTORY`: executable output directory override.
 - `LOCAL_PREBUILT_MODULE_TYPE`: prebuilt library type, defaulting to `STATIC`.
 - `LOCAL_PREBUILT_LOCATION`: imported prebuilt library file path.
+- `LOCAL_EXTERNAL_SOURCE_DIR`: external CMake project source directory.
+- `LOCAL_EXTERNAL_BINARY_DIR`: external project build directory; defaults under `${CMAKE_BINARY_DIR}/_deps`.
+- `LOCAL_EXTERNAL_CMAKE_ARGS`: arguments passed to the external CMake configure step.
+- `LOCAL_EXTERNAL_BUILD_COMMAND`: custom external build command.
+- `LOCAL_EXTERNAL_INSTALL_COMMAND`: custom external install command; defaults to no install.
+- `LOCAL_EXTERNAL_BUILD_BYPRODUCTS`: files produced by the external build.
+- `LOCAL_EXTERNAL_TARGETS`: external build targets used by the default build command.
+- `LOCAL_EXTERNAL_IMPORTED_TARGETS`: imported static-library targets created for byproducts.
+- `LOCAL_EXTERNAL_IMPORTED_LOCATIONS`: imported library paths matching `LOCAL_EXTERNAL_IMPORTED_TARGETS`.
+- `LOCAL_EXTERNAL_DEPENDS`: dependencies for the external project.
 
 `LOCAL_SRC_FILES` and `LOCAL_SRC_DIRS` can be used together. This is useful when
 most files live in one module directory, but a few generated or platform-specific

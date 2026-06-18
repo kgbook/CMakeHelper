@@ -8,6 +8,7 @@ set(BUILD_STATIC_LIBRARY "${LOCAL_BUILD_SYSTEM_PATH}/internal/BuildStaticLibrary
 set(BUILD_SHARED_LIBRARY "${LOCAL_BUILD_SYSTEM_PATH}/internal/BuildSharedLibrary.cmake")
 set(BUILD_EXECUTABLE "${LOCAL_BUILD_SYSTEM_PATH}/internal/BuildExecutable.cmake")
 set(BUILD_PREBUILT "${LOCAL_BUILD_SYSTEM_PATH}/internal/BuildPrebuilt.cmake")
+set(BUILD_EXTERNAL_PROJECT "${LOCAL_BUILD_SYSTEM_PATH}/internal/BuildExternalProject.cmake")
 set(BUILD_INTERFACE_LIBRARY "${LOCAL_BUILD_SYSTEM_PATH}/internal/BuildInterfaceLibrary.cmake")
 set(BUILD_HEADER_LIBRARY "${LOCAL_BUILD_SYSTEM_PATH}/internal/BuildHeaderLibrary.cmake")
 set(ALL_SUBDIR_CMAKELISTS "${LOCAL_BUILD_SYSTEM_PATH}/internal/AllSubdirCMakeLists.cmake")
