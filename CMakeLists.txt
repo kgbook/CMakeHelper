@@ -11,6 +11,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include(${CMAKE_CURRENT_LIST_DIR}/cmake/CMakeHelper.cmake)
 
 option(BUILD_EXAMPLE "Build examples" ON)
+option(BUILD_TESTING "Build tests" ON)
+
+if(BUILD_TESTING)
+    enable_testing()
+endif()
 
 add_subdirectory(hello)
 

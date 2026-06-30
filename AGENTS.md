@@ -19,7 +19,7 @@ set(LOCAL_SRC_FILES src/foo.cpp)
 include(${BUILD_EXECUTABLE})  # or BUILD_STATIC_LIBRARY, BUILD_SHARED_LIBRARY, etc.
 ```
 
-Available targets: `BUILD_OBJECT_LIBRARY`, `BUILD_STATIC_LIBRARY`, `BUILD_SHARED_LIBRARY`, `BUILD_EXECUTABLE`, `BUILD_PREBUILT`, `BUILD_EXTERNAL_PROJECT`, `BUILD_INTERFACE_LIBRARY`, `BUILD_HEADER_LIBRARY`,
+Available targets: `BUILD_OBJECT_LIBRARY`, `BUILD_STATIC_LIBRARY`, `BUILD_SHARED_LIBRARY`, `BUILD_EXECUTABLE`, `BUILD_TEST`, `BUILD_PREBUILT`, `BUILD_EXTERNAL_PROJECT`, `BUILD_INTERFACE_LIBRARY`, `BUILD_HEADER_LIBRARY`,
 `ALL_SUBDIR_CMAKELISTS`, `ALL_CMAKELISTS_UNDER`.
 
 Subdirectory helpers:
@@ -40,3 +40,29 @@ Subdirectory helpers:
 
 - `LOCAL_SRC_DIRS` uses CMake's `aux_source_directory` internally — collects only one directory level, not recursive. Re-run CMake configuration after adding new files.
 - `LOCAL_SRC_FILES` and `LOCAL_SRC_DIRS` can be used together.
+
+## Test Targets
+
+`BUILD_TEST` creates an executable and registers it with CTest. Enable testing in your root `CMakeLists.txt` with `enable_testing()` before using this target.
+
+```cmake
+include(${CLEAR_VARS})
+set(LOCAL_MODULE my_test)
+set(LOCAL_SRC_FILES tests/test_foo.cpp)
+set(LOCAL_OBJECT_LIBRARIES my_lib)
+# Optional: customize test name (defaults to LOCAL_MODULE)
+set(LOCAL_TEST_NAME my_unit_test)
+# Optional: set working directory for test execution
+set(LOCAL_TEST_WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
+# Optional: pass arguments to test executable
+set(LOCAL_TEST_ARGUMENTS --verbose --filter=*)
+include(${BUILD_TEST})
+```
+
+Test-specific variables:
+
+- `LOCAL_TEST_NAME` — CTest test name. Defaults to `LOCAL_MODULE` when unset.
+- `LOCAL_TEST_WORKING_DIRECTORY` — working directory when the test runs.
+- `LOCAL_TEST_ARGUMENTS` — command-line arguments passed to the test executable.
+
+Run tests with `ctest` or `cmake --build . --target test` after configuring with `-DBUILD_TESTING=ON`.
