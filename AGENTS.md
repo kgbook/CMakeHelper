@@ -40,6 +40,10 @@ Subdirectory helpers:
 
 - `LOCAL_SRC_DIRS` uses CMake's `aux_source_directory` internally — collects only one directory level, not recursive. Re-run CMake configuration after adding new files.
 - `LOCAL_SRC_FILES` and `LOCAL_SRC_DIRS` can be used together.
+- `LOCAL_OBJECT_LIBRARIES` may name an object target declared later. Its
+  `$<TARGET_OBJECTS:...>` expression is propagated through the target's
+  interface and resolved at generation time. Do not use it for ordinary
+  library dependencies.
 
 ## Test Targets
 
